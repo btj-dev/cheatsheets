@@ -1,0 +1,199 @@
+% Copyright (C) 2013 Benjamin Jones
+% This cheatsheet is based on 
+%   http://www.stdout.org/~winston/latex/latexsheet.tex
+% by Winston Chang.
+% This work is licensed under the Creative Commons 
+% Attribution-NonCommercial-ShareAlike 3.0 Unported License available at
+%   http://creativecommons.org/licenses/by-nc-sa/3.0/.
+
+\documentclass[10pt,landscape]{article}
+\usepackage{multicol}
+\usepackage{calc}
+\usepackage{ifthen}
+\usepackage[landscape]{geometry}
+\usepackage{comment}
+
+% This sets page margins to .5 inch if using letter paper, and to 1cm
+% if using A4 paper. (This probably isn't strictly necessary.)
+% If using another size paper, use default 1cm margins.
+\ifthenelse{\lengthtest { \paperwidth = 11in}}
+{ \geometry{top=.5in,left=.5in,right=.5in,bottom=.5in} }
+{\ifthenelse{ \lengthtest{ \paperwidth = 297mm}}
+  {\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+  {\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+  }
+
+% Turn off header and footer
+\pagestyle{empty}
+ 
+
+% Redefine section commands to use less space
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%x
+                                {\normalfont\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                                {-1explus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%
+                                {\normalfont\normalsize\bfseries}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {1ex plus .2ex}%
+                                {\normalfont\small\bfseries}}
+\makeatother
+
+% Define BibTeX command
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+% Don't print section numbers
+\setcounter{secnumdepth}{0}
+
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+
+\newcommand{\ind}{\hspace{12pt}}
+
+% -----------------------------------------------------------------------
+\begin{document}
+
+\raggedright
+\footnotesize
+\begin{multicols}{3}
+
+
+% multicol parameters
+% These lengths are set only within the two main columns
+%\setlength{\columnseprule}{0.25pt}
+\setlength{\premulticols}{1pt}
+\setlength{\postmulticols}{1pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{2pt}
+
+\begin{center}
+     \Large{\textbf{Bash Cheatsheet}} \\
+\end{center}
+
+\section{Environment Variables}
+Set these in your .bash\_profile or .bashrc file with
+\texttt{export \textit{VAR}=\textit{VALUE}:\$\textit{VAR}}.
+\newlength{\MyLen}
+\settowidth{\MyLen}{\texttt{letterpaper}/\texttt{a4paper} \ }
+\begin{tabular}{@{}p{\the\MyLen}%
+                @{}p{\linewidth-\the\MyLen}@{}}
+PATH    & Colon separated list of search locations for programs. \\
+\end{tabular}
+
+\begin{comment}
+\subsection{OpenMP}
+\begin{tabular}{@{}p{\the\MyLen}%
+                @{}p{\linewidth-\the\MyLen}@{}}
+\texttt{OMP\_NUM\_THREADS} & Number of threads to spawn. \\
+\texttt{OMP\_STACKSIZE} & Thread stacksize. Try increasing this in the event of seg faults. \\
+\end{tabular}
+\end{comment}
+
+\section{Local Commands}
+This commands will do something on the machine that your are logged into. Commands with an asterisk (*) will clobber existing files without warning and data may be lost.
+\subsection{Navigating the file system}
+\begin{tabular}{@{}p{\the\MyLen}%
+                @{}p{\linewidth-\the\MyLen}@{}}
+\textbf{cd \textit{dir}} & Change the working directory to \textit{dir}.\\
+\textbf{pwd} & Print the name of the current working directory.\\
+\end{tabular}
+
+\subsection{Adding, removing, and moving files}
+\begin{tabular}{@{}p{\the\MyLen}%
+                @{}p{\linewidth-\the\MyLen}@{}}
+\textbf{cp \textit{src} \textit{dest}} & * Copy file \textit{src} to \textit{dest}. *\\
+\textbf{cp -r \textit{src} \textit{dest}} & * Copy directory \textit{src} to \textit{dest}. *\\
+\textbf{ln \textit{src} \textit{dest}} & Hard link \textit{src} to \textit{dest}. If \textit{src} is deleted, \textit{dest} still exists. If \textit{src} is deleted and a replacement created, \textit{dest} still points to the old version.\\
+\textbf{ln -s \textit{src} \textit{dest}} & Symbolically link \textit{src} to \textit{dest}. Any changes to \textit{src} will be seen by \textit{dest}. If \textit{src} is moved, \textit{dest} needs to be updated to the new location. If debating between a hard and soft link, this is probably the one you want.\\\
+\textbf{mkdir \textit{dir}} & Create a new empty directory named \textit{dir}.\\
+\textbf{mv \textit{src} \textit{dest}} & * Copy file or directory \textit{src} to \textit{dest}. *\\
+\textbf{touch \textit{file}} & Create a new empty file named \textit{file}.\\
+\textbf{rm \textit{file}} & * Permanently remove \textit{file} *\\
+\textbf{rm -r \textit{dir}} & * Permanently remove \textit{dir} and everything in it. *\\
+\textbf{rm -f \textit{file}} & * Force remove file (suppress warnings).*\\
+\textbf{rm -rf \textit{file}} & * Force remove dir (suppress warnings).*\\
+\end{tabular}
+\subsection{Emacs}
+Emacs is a text editor (and a whole lot more). Other options are vim, nano, pico, etc. 
+
+Commands prefixed with \textbf{c-} or \textbf{M-} mean hold down the control or escape key. For example, to save a file, press \textit{control} and \textit{x} simultaneously, then \textit{control} and \textit{s}. The movements will be cryptic at first, but eventually become automatic.
+
+The lower left corner of the screen provides feedback on commands. For example, when saving \textit{file}, it either say \texttt{Wrote \textit{file}}, prompt for a filename, or request confirmation before proceeding.
+\begin{tabular}{@{}p{\the\MyLen}%
+                @{}p{\linewidth-\the\MyLen}@{}}
+\textbf{emacs \textit{file}} & Open emacs and edit \textit{file}.\\
+\textbf{c-x 2} & Split the screen horizontally.\\
+\textbf{c-x 3} & Split the screen vertically.\\
+\textbf{c-x c-f} & Open a file. You will be prompted for the name.\\
+\textbf{c-x c-k} & Kill the current buffer.\\
+\textbf{c-x c-s} & Save the current buffer.\\
+\textbf{c-x c-c} & Quit emacs.\\
+\textbf{c-x o} & Switch windows if the screen is split.\\
+\end{tabular}
+
+\subsection{Building and installing programs}
+This section assumes that the program can be installed with autotools. Using the option \textit{--prefix} for configure will set the installation directory. For example, the full build process for installing R to \$HOME/opt/R, then symlinking to \$HOME/bin would be as follows. This downloads the source code (wget), opens the archive (tar), builds and installs R, then deletes the source code.. Many programs will have slightly different instructions. In that case, look for a file named README or INSTALL along with the source code.\\
+\texttt{
+\scriptsize{wget http://cran.r-project.org/src/base/R-3/R-3.0.2.tar.gz}\\
+tar -xf R-3.0.2.tar.gz\\
+cd R-3.0.2\\
+./configure -{}-prefix=\$HOME/opt/R\\
+make\\
+make install\\
+ln -s \$HOME/opt/R/bin/R \$HOME/bin/R\\
+cd ..\\
+rm -rf R-3.0.2\\
+}
+
+\begin{tabular}{@{}p{\the\MyLen}%
+                @{}p{\linewidth-\the\MyLen}@{}}
+\textbf{./configure} & Run the cofigure script to set up the installation.\\
+\textbf{make} & Build the program (source code $\rightarrow$ executable)\\
+\textbf{make check} & Test that the installation worked.\\
+\textbf{make clean} & Remove the files created by \textit{make}.\\
+\textbf{make install} & Install the program.\\
+\end{tabular}
+
+\section{Remote commands}
+These commands are useful for copying data between machines, remotely logging in, etc.
+
+\subsection{Logging in}
+\begin{tabular}{@{}p{\the\MyLen}%
+                @{}p{\linewidth-\the\MyLen}@{}}
+\textbf{ssh \textit{user}@\textit{host}} & Login to \textit{host} as \textit{user}.\\
+\textbf{ssh -X \textit{user}@\textit{host}} & Login to \textit{host} as \textit{user} and start X11 forwarding. This allows graphics on \textit{host} to be displayed on your local machine.
+\end{tabular}
+
+\subsection{Copying files}
+As with \textit{cp}, \textit{scp} accepts the option \textit{-r} for copying directories.
+\begin{tabular}{@{}p{\the\MyLen}%
+                @{}p{\linewidth-\the\MyLen}@{}}
+\scriptsize{\textbf{scp \textit{dest} \textit{user}@\textit{host}:\textit{src}}} & Copy \textit{src} on the local machine to \textit{dest} on \textit{host}, logging in as \textit{user} to \textit{host}.\\
+\scriptsize{\textbf{scp \textit{user}@\textit{host}:\textit{src} \textit{dest}}} & Copy \textit{src} on host to \textit{dest} on the local machine, logging in as \textit{user} to \textit{host}.\\
+\end{tabular}
+
+\subsection{Printing code}
+\begin{tabular}{@{}p{\the\MyLen}%
+                @{}p{\linewidth-\the\MyLen}@{}}
+\scriptsize{\textbf{enscript \textit{file}}} & .\\
+\scriptsize{\ind\textbf{-{}-color}} & Syntax highlight the code.\\
+\scriptsize{\ind\textbf{-{}-columns=2}} & Print with two columns.\\
+\scriptsize{\ind\textbf{-{}-fancy-header}} & .\\
+\scriptsize{\ind\textbf{-{}-landscape}} & Print with the paper in landscape orientation.\\
+\scriptsize{\ind\textbf{-{}-pretty-print}} & .\\
+\scriptsize{\ind\textbf{-{}-output=[file]}} & Print to file (e.g. gparms.ps)\\
+\scriptsize{\ind\textbf{-{}-P}} & .\\
+\scriptsize{\textbf{psnup \textit{file}}} & Multiple pages per sheet\\
+\scriptsize{\ind\textbf{-\#}} & \# pages per sheet.\\
+\scriptsize{\ind\textbf{-l}} & Print in landscape mode.
+\end{tabular}
+
+
+\end{multicols}
+\end{document}
